@@ -6,6 +6,8 @@ from unittest import mock
 
 from PIL import Image as PIL_Image
 from PIL import ImageDraw
+from PIL import ImageEnhance
+from PIL import ImageFilter
 
 from nider.core import MultilineTextUnit
 
@@ -149,6 +151,38 @@ class TestImageBaseMethods(unittest.TestCase):
         with create_test_image():
             self.img.draw_on_image(
                 image_path=os.path.abspath('test.png'))
+        self.assertTrue(_draw_content_mock.called)
+
+    @mock.patch('PIL.ImageEnhance._Enhance.enhance')
+    @mock.patch('nider.models.Image._save')
+    @mock.patch('nider.models.Image._draw_content')
+    def test_draw_on_image_with_enhancements(self,
+                                             _draw_content_mock,
+                                             _save,
+                                             enhance_mock):
+        with create_test_image():
+            enhance_mock.return_value = PIL_Image.open('test.png')
+            self.img.draw_on_image(
+                image_path=os.path.abspath('test.png'),
+                image_enhancements=((ImageEnhance.Sharpness, 0.5),
+                                    (ImageEnhance.Brightness, 0.5)))
+        self.assertTrue(enhance_mock.called)
+        self.assertTrue(_draw_content_mock.called)
+
+    @mock.patch('PIL.Image.Image.filter')
+    @mock.patch('nider.models.Image._save')
+    @mock.patch('nider.models.Image._draw_content')
+    def test_draw_on_image_with_filters(self,
+                                        _draw_content_mock,
+                                        _save,
+                                        filter_mock):
+        filters = (ImageFilter.BLUR, ImageFilter.GaussianBlur(2))
+        with create_test_image():
+            filter_mock.return_value = PIL_Image.open('test.png')
+            self.img.draw_on_image(
+                image_path=os.path.abspath('test.png'),
+                image_filters=filters)
+        self.assertTrue(filter_mock.called)
         self.assertTrue(_draw_content_mock.called)
 
     def test_draw_on_image_with_invalid_imagepath(self):

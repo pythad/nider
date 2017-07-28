@@ -347,11 +347,13 @@ Check the full example `here <https://github.com/pythad/nider/blob/master/exampl
     Draws preinitiated image and its attributes on an image. Image size will be changed to the size of provided image.
 
     :param str image_path: Path of the image to draw on
+    :param itarable image_enhancements: itarable of tuples, each containing a class from ``PIL.ImageEnhance`` that will be applied and factor - a floating point value controlling the enhancement. Check `documentation <http://pillow.readthedocs.io/en/latest/reference/ImageEnhance.html>`_ of ``PIL.ImageEnhance`` for more info about availabe enhancements
+    :param itarable image_filters: itarable of filters from ``PIL.ImageFilter`` that will be applied. Check `documentation <http://pillow.readthedocs.io/en/latest/reference/ImageFilter.html>`_ of ``PIL.ImageFilter`` for more info about availabe filters
 
     :raises FileNotFoundError: if the file at ``image_path`` cannot be found
 
-Example
--------
+Examples
+--------
 
 .. code-block:: python
 
@@ -367,6 +369,16 @@ Example
                 )
 
     img.draw_on_image('example_bg.jpg')
+
+Using filters and enhancements:
+
+.. code-block:: python
+
+    img.draw_on_image('example_bg.jpg',
+                      image_enhancements=((ImageEnhance.Contrast, 0.75),
+                                         (ImageEnhance.Brightness, 0.5)),
+                      image_filters=((ImageFilter.BLUR),),
+                      )
 
 Check the full example `here <https://github.com/pythad/nider/blob/master/examples/draw_on_image_example/script.py>`_ 
 

@@ -2,8 +2,10 @@ import math
 import os
 import warnings
 
-from PIL import Image as PILImage
+from PIL import Image as PIL_Image
 from PIL import ImageDraw
+from PIL import ImageEnhance
+from PIL import ImageFilter
 
 from nider.core import MultilineTextUnit
 from nider.core import SingleLineTextUnit
@@ -113,16 +115,26 @@ class Image:
         self._draw_content()
         self._save()
 
-    def draw_on_image(self, image_path):
+    def draw_on_image(self, image_path, image_enhancements=None, image_filters=None):
         '''Draws preinitialized image and its attributes on an image
 
         Attributes:
             image_path (str): path of the image to draw on.
+            image_enhancements (itarable): itarable of tuples, each containing a class from PIL.ImageEnhance that will be applied and factor - a floating point value controlling the enhancement. Check docs of PIL.ImageEnhance for more info.
+            image_filters (itarable): itarable of filters from PIL.ImageFilter that will be applied. Check docs of PIL.ImageFilter for more info.
         '''
         if not os.path.isfile(image_path):
             raise FileNotFoundError(
                 'Can\'t find image {}. Please, choose an existing image'.format(image_path))
-        self.image = PILImage.open(image_path)
+        self.image = PIL_Image.open(image_path)
+        if image_filters:
+            for image_filter in image_filters:
+                self.image = self.image.filter(image_filter)
+        if image_enhancements:
+            for enhancement in image_enhancements:
+                enhance_method, enhance_factor = enhancement[0], enhancement[1]
+                enhancer = enhance_method(self.image)
+                self.image = enhancer.enhance(enhance_factor)
         self._create_draw_object()
         self.width, self.height = self.image.size
         self._draw_content()
@@ -169,7 +181,7 @@ class Image:
         Creates a basic PIL image previously fixing its size
         '''
         self._fix_image_size()
-        self.image = PILImage.new("RGBA", (self.width, self.height))
+        self.image = PIL_Image.new("RGBA", (self.width, self.height))
 
     def _create_draw_object(self):
         '''Creates a basic PIL Draw object'''
@@ -183,7 +195,7 @@ class Image:
         Attributes:
             texture_path (str): path of the texture to use
         '''
-        texture = PILImage.open(texture_path, 'r')
+        texture = PIL_Image.open(texture_path, 'r')
         texture_w, texture_h = texture.size
         bg_w, bg_h = self.image.size
         times_for_Ox = math.ceil(bg_w / texture_w)
