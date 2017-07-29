@@ -4,8 +4,6 @@ import warnings
 
 from PIL import Image as PIL_Image
 from PIL import ImageDraw
-from PIL import ImageEnhance
-from PIL import ImageFilter
 
 from nider.core import MultilineTextUnit
 from nider.core import SingleLineTextUnit
