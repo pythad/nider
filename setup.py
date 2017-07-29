@@ -20,7 +20,6 @@ requirements = [
     'Pillow',
     'pyparsing',
     'six',
-    'webcolors'
 ]
 
 setup_requirements = [

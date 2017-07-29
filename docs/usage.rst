@@ -42,11 +42,9 @@ Each of the units is represented by a class in ``nider.models``:
     :param int text_width: Header's text width - number of characters in a line
     :param int line_padding: Header's line padding - padding (in pixels) between the lines
     :param int fontsize: Size of the font
-    :param color: Either hex or rgb representation of text color
-    :type color: str or tuple(int, int, int)
+    :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param bool drop_shadow: Boolean flag that indicates if text has to drop shadow
-    :param shadowcolor: Either hex or rgb representation of shadowcolor color
-    :type shadowcolor: str or tuple(int, int, int)
+    :param str shadowcolor: string that represents a shadow color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :raises nider.exceptions.InvalidAlignException: if ``align`` is not one of 'left' or 'center' or 'right'
@@ -87,11 +85,9 @@ The class has the same attribures and behaviour as ``nider.models.Header``.
     :param int text_width: Paragraph's text width - number of characters in a line
     :param int line_padding: Paragraph's line padding - padding (in pixels) between the lines
     :param int fontsize: Size of the font
-    :param color: Either hex or rgb representation of text color
-    :type color: str or tuple(int, int, int)
+    :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param bool drop_shadow: Boolean flag that indicates if text has to drop shadow
-    :param shadowcolor: Either hex or rgb representation of shadowcolor color
-    :type shadowcolor: str or tuple(int, int, int)
+    :param str shadowcolor: string that represents a shadow color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :raises nider.exceptions.InvalidAlignException: if ``align`` is not one of 'left' or 'center' or 'right'
@@ -127,11 +123,9 @@ Example
     :param str text: Text used in the linkback
     :param str fontfullpath: Path to the font used in the linkback
     :param int fontsize: Size of the font
-    :param color: Either hex or rgb representation of text color
-    :type color: str or tuple(int, int, int)
+    :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param bool drop_shadow: Boolean flag that indicates if text has to drop shadow
-    :param shadowcolor: Either hex or rgb representation of shadowcolor color
-    :type shadowcolor: str or tuple(int, int, int)
+    :param str shadowcolor: string that represents a shadow color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :param int bottom_padding: Linkback's bottom padding - padding (in pixels) between the bottom of the image and the linkback itself
@@ -312,8 +306,7 @@ Check the full example `here <https://github.com/pythad/nider/blob/master/exampl
     Draws preinitiated image and its attributes on a colored background. If ``bgcolor``
     is set to ``None``, random ``nider.colors.colormap.FLAT_UI`` color is generated
 
-    :param bgcolor: Either hex or rgb representation of background color
-    :type bgcolor: str or tuple(int, int, int)
+    :param str bgcolor: string that represents a background color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
 
     :raises nider.exceptions.ImageSizeFixedWarning: if the image size has to be adjusted to the provided content's size because the content takes much space
 

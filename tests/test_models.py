@@ -215,8 +215,8 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
 
     @mock.patch('PIL.ImageDraw.ImageDraw.rectangle')
     def test_fill_img_with_color(self, mock):
-        bgcolor = (0, 0, 0)
-        self.img.bgcolor = (0, 0, 0)
+        bgcolor = '#000'
+        self.img.bgcolor = bgcolor
         self.img._fill_image_with_color()
         mock.assert_called_once_with(
             [(0, 0), self.img.image.size], fill=bgcolor)
@@ -253,7 +253,7 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
 
     @mock.patch('PIL.ImageDraw.ImageDraw.text')
     def test_draw_linkback(self, mock):
-        self.img.color = (0, 0, 0)
+        self.img.color = '#000'
         aligns = ['center', 'right', 'left']
         for align in aligns:
             with self.subTest():
@@ -274,14 +274,14 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
     @mock.patch('PIL.ImageDraw.ImageDraw.text')
     def test_draw_unit(self, text_mock):
         drop_shadow_options = [True, False]
-        self.img.color = (0, 0, 0)
+        self.img.color = '#000'
         start_height = 0
         aligns = ['center', 'right', 'left']
         for align in aligns:
             for drop_shadow_option in drop_shadow_options:
                 self.img.drop_shadow = drop_shadow_option
                 if drop_shadow_option:
-                    self.img.shadowcolor = (0, 0, 0)
+                    self.img.shadowcolor = '#000'
                 with self.subTest():
                     unit = MultilineTextUnit(
                         text='foo', fontfullpath=None, drop_shadow=drop_shadow_option,

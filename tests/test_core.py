@@ -26,13 +26,13 @@ class TestText(unittest.TestCase):
         self.assertIsNotNone(self.text_mock.font)
 
     def test_setting_decoration_with_drop_shadow(self):
-        Text._set_decoration(self.text_mock, (0, 0, 0), True, (0, 0, 0))
+        Text._set_decoration(self.text_mock, '#000', True, '#000')
         self.assertEqual(self.text_mock.color, (0, 0, 0))
         self.assertEqual(self.text_mock.drop_shadow, True)
         self.assertEqual(self.text_mock.shadowcolor, (0, 0, 0))
 
     def test_setting_decoration_without_drop_shadow(self):
-        Text._set_decoration(self.text_mock, (0, 0, 0), False, (0, 0, 0))
+        Text._set_decoration(self.text_mock, '#000', False, '#000')
         self.assertEqual(self.text_mock.color, (0, 0, 0))
         self.assertEqual(self.text_mock.drop_shadow, False)
         self.assertIsNone(self.text_mock.shadowcolor)
@@ -46,13 +46,13 @@ class TestMultilineText(unittest.TestCase):
                                 T_mock,
                                 MTM_mock):
         multiline_text = MultilineText(text='foo', fontfullpath='foo.ttf',
-                                       fontsize=15, color=(0, 0, 0),
-                                       drop_shadow=False, shadowcolor=(0, 0, 0),
+                                       fontsize=15, color='#000',
+                                       drop_shadow=False, shadowcolor='#000',
                                        text_width=20, line_padding=5)
         T_mock.assert_called_once_with(multiline_text, text='foo',
                                        fontfullpath='foo.ttf', fontsize=15,
-                                       color=(0, 0, 0),
-                                       drop_shadow=False, shadowcolor=(0, 0, 0))
+                                       color='#000',
+                                       drop_shadow=False, shadowcolor='#000')
         MTM_mock.assert_called_once_with(multiline_text,
                                          text_width=20,
                                          line_padding=5)
@@ -92,14 +92,14 @@ class TestMultilineTextUnit(unittest.TestCase):
                                 AM_mock,
                                 _set_unit_mock):
         unit = MultilineTextUnit(text='foo', fontfullpath='foo.ttf',
-                                 fontsize=15, color=(0, 0, 0),
-                                 drop_shadow=False, shadowcolor=(0, 0, 0),
+                                 fontsize=15, color='#000',
+                                 drop_shadow=False, shadowcolor='#000',
                                  text_width=20, line_padding=5,
                                  align='center')
         MT_mock.assert_called_once_with(unit, text='foo',
                                         fontfullpath='foo.ttf', fontsize=15,
-                                        color=(0, 0, 0),
-                                        drop_shadow=False, shadowcolor=(0, 0, 0),
+                                        color='#000',
+                                        drop_shadow=False, shadowcolor='#000',
                                         text_width=20,
                                         line_padding=5)
         AM_mock.assert_called_once_with(unit, align='center')
