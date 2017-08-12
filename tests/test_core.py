@@ -25,11 +25,25 @@ class TestText(unittest.TestCase):
         Text._set_font(self.text_mock)
         self.assertIsNotNone(self.text_mock.font)
 
-    def test_setting_decoration_with_drop_shadow(self):
+    def test_setting_decoration_with_color_provided(self):
         Text._set_decoration(self.text_mock, '#000', True, '#000')
         self.assertEqual(self.text_mock.color, (0, 0, 0))
+
+    def test_setting_decoration_without_color(self):
+        Text._set_decoration(self.text_mock, None, True, '#000')
+        self.assertTrue(self.text_mock.auto_color)
+        self.assertIsNone(self.text_mock.color)
+
+    def test_setting_decoration_with_drop_shadow_and_shadowcolor(self):
+        Text._set_decoration(self.text_mock, '#000', True, '#000')
         self.assertEqual(self.text_mock.drop_shadow, True)
         self.assertEqual(self.text_mock.shadowcolor, (0, 0, 0))
+
+    def test_setting_decoration_with_drop_shadow_and_without_shadowcolor(self):
+        Text._set_decoration(self.text_mock, '#000', True, None)
+        self.assertEqual(self.text_mock.drop_shadow, True)
+        self.assertTrue(self.text_mock.auto_shadowcolor, True)
+        self.assertIsNone(self.text_mock.shadowcolor)
 
     def test_setting_decoration_without_drop_shadow(self):
         Text._set_decoration(self.text_mock, '#000', False, '#000')

@@ -2,8 +2,6 @@
 Usage
 =====
 
-TODO: say that content.padding isn't always took into consideration
-
 This article is a tutorial for ``nider`` package and at the same time it is a full reference of all ``nider`` models and possibilities.
 
 ***********
@@ -18,8 +16,6 @@ There are three main units each ``nider.Image`` can consist of:
 
 .. image:: images/available_units.png
 
-Paragraph unit is required for each image whereas header and linkback are optional.
-
 Each of the units is represented by a class in ``nider.models``:
 
 - ``nider.models.Header``
@@ -30,9 +26,9 @@ Each of the units is represented by a class in ``nider.models``:
 =========================
 
 .. class:: Header(text, \
-                 fontfullpath, fontsize=18, \
+                 fontfullpath=None, fontsize=18, \
                  text_width=21, line_padding=6, \
-                 color='#000', drop_shadow=False, shadowcolor='#646464', \
+                 color=None, drop_shadow=False, shadowcolor=None, \
                  align='center')
 
     Base class for the header unit
@@ -73,9 +69,9 @@ Example
 The class has the same attribures and behaviour as ``nider.models.Header``.
 
 .. class:: Paragraph(text, \
-                 fontfullpath, fontsize=18, \
+                 fontfullpath=None, fontsize=18, \
                  text_width=21, line_padding=6, \
-                 color='#000', drop_shadow=False, shadowcolor='#646464', \
+                 color=None, drop_shadow=False, shadowcolor=None, \
                  align='center')
 
     Base class for the paragraph unit
@@ -114,8 +110,8 @@ Example
 ===========================
 
 .. class:: Linkback(text, \
-                 fontfullpath, fontsize=18, \
-                 color='#000', drop_shadow=False, shadowcolor='#646464', \
+                 fontfullpath=None, fontsize=18, \
+                 color=None, drop_shadow=False, shadowcolor=None, \
                  align='center', bottom_padding=20)
 
     Base class for the linkback unit
@@ -146,6 +142,14 @@ Example
                         color='#ededed'
                         )
 
+------------
+
+.. note::
+
+    Parameters ``color`` and ``shadowcolor`` are optional for any unit. They can be generated automatically by ``nider``. ``nider`` analyzes background color of either a texture or of an image and chooses an opposite one to it. So if your image in mainly dark , white text color will be auto generated and set. The same applies to shadow color.
+
+    Although it's a nice feature for backgrounds you have no control over, we'd recommend to provide colors explicitly.
+
 *************
 Image content
 *************
@@ -155,14 +159,23 @@ In order to aggregate all of the units together you need to create an instance o
 ``nider.models.Content``
 ==========================
 
-.. class:: Content(paragraph, header=None, linkback=None, padding=45)
+.. class:: Content(paragraph=None, header=None, linkback=None, padding=45)
 
     Class that aggregates different units into a sigle object
 
     :param nider.models.Paragraph paragraph: Paragraph that will be used
     :param nider.models.Header header: Header that will be used
     :param nider.models.Linkback linkback: Linkback that will be used
-    :param int padding: Content's padding - padding (in pixels) between the units
+    :param int padding: Content's padding - padding (in pixels) between the units.
+    :raises nider.exceptions.ImageGeneratorException: if neither of paragraph, header or linkback is provided
+
+.. warning::
+
+    Content has to consist at least of one unit: header, paragraph or linkback.
+
+.. warning::
+
+    ``padding`` is taken into account only if image is to get resized. If size allows content to fit freely, pre-calculated paddings will be used.
 
 Example
 -------
@@ -252,7 +265,10 @@ Having an instance of ``nider.models.Image`` we are ready to create a real image
 
 ``nider`` comes with 3 options of drawing your image:
 
- - ``Image.draw_on_texture`` - draws preinitialized image and its attributes on a texture. **nider takes care of filling image of any size with textrure you privide. You don't need to create textured images by pasting texture mulpitle times in Photoshop or Gimp.**
+ - ``Image.draw_on_texture`` - draws preinitialized image and its attributes on a texture.
+
+ .. note::
+     You don't need to create textured images by pasting texture mulpitle times in Photoshop or Gimp. ``nider`` takes care of filling image of any size with textrure you privide.
 
  - ``Image.draw_on_bg`` - Draws preinitialized image and its attributes on a colored background. nider uses a color you provide to fill the image and then draws the content.
 

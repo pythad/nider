@@ -29,6 +29,7 @@ from nider.utils import create_test_image
 from nider.utils import get_random_texture
 
 from nider.exceptions import ImageSizeFixedWarning
+from nider.exceptions import ImageGeneratorException
 
 
 class TestLinkback(unittest.TestCase):
@@ -42,11 +43,46 @@ class TestLinkback(unittest.TestCase):
 
 class TestContent(unittest.TestCase):
 
+    def test_initialization_without_any_units(self):
+        with self.assertRaises(ImageGeneratorException):
+            Content()
+
+    def test_depending_on_opposite_to_bg_color(self):
+        header = Header(text='foo', fontfullpath=None)
+        linkback = Linkback(text='bar', fontfullpath=None)
+        para = Paragraph(text='foo bar', fontfullpath=None)
+        content = Content(para, header=header, linkback=linkback)
+        single_unit_content = Content(para)
+        self.assertTrue(content.depends_on_opposite_to_bg_color)
+        self.assertTrue(single_unit_content.depends_on_opposite_to_bg_color)
+
+    def test_depending_on_opposite_to_bg_color_with_one_dependency(self):
+        header = Header(text='foo', fontfullpath=None, color='#000')
+        linkback = Linkback(text='bar', fontfullpath=None)
+        para = Paragraph(text='foo bar', fontfullpath=None, color='#000')
+        content = Content(para, header=header, linkback=linkback)
+        single_unit_content = Content(para)
+        self.assertTrue(content.depends_on_opposite_to_bg_color)
+        self.assertFalse(single_unit_content.depends_on_opposite_to_bg_color)
+
+    def test_depending_on_opposite_to_bg_color_without_dependencies(self):
+        header = Header(text='foo', fontfullpath=None, color='#000')
+        linkback = Linkback(text='bar', fontfullpath=None, color='#000')
+        para = Paragraph(text='foo bar', fontfullpath=None, color='#000')
+        content = Content(para, header=header, linkback=linkback)
+        single_unit_content = Content(para)
+        self.assertFalse(content.depends_on_opposite_to_bg_color)
+        self.assertFalse(single_unit_content.depends_on_opposite_to_bg_color)
+
+
+class TestContentBehavior(unittest.TestCase):
+
     def setUp(self):
         header = Header(text='foo', fontfullpath=None)
         linkback = Linkback(text='bar', fontfullpath=None)
         para = Paragraph(text='foo bar', fontfullpath=None)
         self.content = Content(para, header=header, linkback=linkback)
+
 
     def test_content_height(self):
         self.assertIsNotNone(self.content.height)
@@ -129,6 +165,7 @@ class TestImageBaseMethods(unittest.TestCase):
                              _draw_content_mock,
                              _save):
         self.img.draw_on_texture()
+        self.assertIsNotNone(self.img.opposite_to_bg_color)
         self.assertTrue(_draw_content_mock.called)
 
     def test_draw_on_texture_with_invalid_texturepath(self):
@@ -141,6 +178,7 @@ class TestImageBaseMethods(unittest.TestCase):
                         _draw_content_mock,
                         _save):
         self.img.draw_on_bg()
+        self.assertIsNotNone(self.img.opposite_to_bg_color)
         self.assertTrue(_draw_content_mock.called)
 
     @mock.patch('nider.models.Image._save')
@@ -151,6 +189,7 @@ class TestImageBaseMethods(unittest.TestCase):
         with create_test_image():
             self.img.draw_on_image(
                 image_path=os.path.abspath('test.png'))
+        self.assertIsNotNone(self.img.opposite_to_bg_color)
         self.assertTrue(_draw_content_mock.called)
 
     @mock.patch('PIL.ImageEnhance._Enhance.enhance')
@@ -201,6 +240,7 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
         self.img = Image(content, self.fullpath)
         self.img._create_image()
         self.img._create_draw_object()
+        self.img.opposite_to_bg_color = '#000'
 
     @classmethod
     def tearDownClass(self):
@@ -260,6 +300,21 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
                 self.img.linkback.align = align
                 self.img._draw_linkback()
                 self.assertTrue(mock.called)
+
+    def test_prepare_content(self):
+        content = self.img.content
+        self.img._prepare_content()
+        for unit in [content.header, content.para, content.linkback]:
+            self.assertIsNotNone(unit.color)
+            self.assertIsNotNone(unit.shadowcolor)
+
+    def test_prepare_content_with_None_units(self):
+        content = self.img.content
+        content.header = None
+        content.linkback = None
+        self.img._prepare_content()
+        self.assertIsNotNone(content.para.color)
+        self.assertIsNotNone(content.para.shadowcolor)
 
     @mock.patch('nider.models.Image._draw_linkback')
     @mock.patch('nider.models.Image._draw_para')

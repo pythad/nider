@@ -14,7 +14,7 @@ class Text:
         text (str): text used in the object.
         fontfullpath (str): path to the font used in the object.
         fontsize (int): size of the font.
-        color (str, tuple): either hex or rgb representation of text color.
+        color (str): string that represents a color. Must be compatible with PIL.ImageColor
         drop_shadow (bool): boolean flag that indicates if text has to drop shadow.
         shadowcolor (str, tuple): either hex or rgb representation of shadowcolor color.
     '''
@@ -37,12 +37,19 @@ class Text:
 
     def _set_decoration(self, color, drop_shadow, shadowcolor):
         '''Sets object's color and shadow'''
-        self.color = color_to_rgb(color)
-        if drop_shadow is True:
-            self.drop_shadow = drop_shadow
-            self.shadowcolor = color_to_rgb(shadowcolor)
+        if color:
+            self.color = color_to_rgb(color)
         else:
-            self.drop_shadow = False
+            self.auto_color = True
+            self.color = None
+        self.drop_shadow = drop_shadow
+        if drop_shadow is True:
+            if shadowcolor:
+                self.shadowcolor = color_to_rgb(shadowcolor)
+            else:
+                self.auto_shadowcolor = True
+                self.shadowcolor = None
+        else:
             self.shadowcolor = None
 
 
@@ -58,9 +65,9 @@ class MultilineText(MultilineTextMixin, Text):
 class SingleLineTextUnit(AlignMixin, Text):
     '''Base class for the single line text unit'''
 
-    def __init__(self, text, fontfullpath,
+    def __init__(self, text, fontfullpath=None,
                  fontsize=18, align='right',
-                 color='#000', drop_shadow=False, shadowcolor='#646464'
+                 color=None, drop_shadow=False, shadowcolor=None
                  ):
         AlignMixin.__init__(self, align=align)
         Text.__init__(
@@ -79,9 +86,9 @@ class MultilineTextUnit(AlignMixin, MultilineText):
     '''Base class for the multiline text unit'''
 
     def __init__(self, text,
-                 fontfullpath, fontsize=18,
+                 fontfullpath=None, fontsize=18,
                  text_width=21, line_padding=6,
-                 color='#000', drop_shadow=False, shadowcolor='#646464',
+                 color=None, drop_shadow=False, shadowcolor=None,
                  align='center'):
         AlignMixin.__init__(self, align=align)
         MultilineText.__init__(self, text=text,
