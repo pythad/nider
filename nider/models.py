@@ -88,12 +88,24 @@ class Image:
         fullpath (str): path where the image has to be saved.
         width (int): width of the image.
         height (int): height of the image.
+        title (str): title of the image from Header.text.
+        description (str): description of the image from Paragraph.text.
     '''
 
-    def __init__(self, content, fullpath, width=1080, height=1080):
+    def __init__(self, content, fullpath, width=1080, height=1080, title='', description=''):
         self._set_content(content)
         self._set_fullpath(fullpath)
         self._set_image_size(width, height)
+
+        if self.content.header is not None:
+            self._set_title(self.content.header.text)
+        else:
+            self._set_title(title)
+
+        if self.content.para is not None:
+            self._set_description(self.content.para.text)
+        else:
+            self._set_description(description)
 
     def draw_on_texture(self, texture_path=None):
         '''Draws preinitialized image and its attributes on a texture
@@ -193,6 +205,14 @@ class Image:
                 "Width or height of the image have to be positive integers")
         self.width = width
         self.height = height
+
+    def _set_title(self, title):
+        '''Sets title of the image'''
+        self.title = title
+
+    def _set_description(self, description):
+        '''Sets description of the image'''
+        self.description = description
 
     def _fix_image_size(self):
         '''Fixes image's size'''
