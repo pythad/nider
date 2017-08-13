@@ -352,7 +352,6 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
 class TestFacebookSquarePost(unittest.TestCase):
 
     @mock.patch('nider.models.Image._set_fullpath')
-    @mock.patch('nider.models.Image._set_content')
     def setUp(self, *mocks):
         self.post = FacebookSquarePost(content=mock.Mock(),
                                        fullpath=mock.Mock())
@@ -365,7 +364,6 @@ class TestFacebookSquarePost(unittest.TestCase):
 class TestFacebookLandscapePost(unittest.TestCase):
 
     @mock.patch('nider.models.Image._set_fullpath')
-    @mock.patch('nider.models.Image._set_content')
     def setUp(self, *mocks):
         self.post = FacebookLandscapePost(content=mock.Mock(),
                                           fullpath=mock.Mock())
@@ -378,7 +376,6 @@ class TestFacebookLandscapePost(unittest.TestCase):
 class TestTwitterPost(unittest.TestCase):
 
     @mock.patch('nider.models.Image._set_fullpath')
-    @mock.patch('nider.models.Image._set_content')
     def setUp(self, *mocks):
         self.post = TwitterPost(content=mock.Mock(),
                                 fullpath=mock.Mock())
@@ -391,7 +388,6 @@ class TestTwitterPost(unittest.TestCase):
 class TestTwitterLargeCard(unittest.TestCase):
 
     @mock.patch('nider.models.Image._set_fullpath')
-    @mock.patch('nider.models.Image._set_content')
     def setUp(self, *mocks):
         self.post = TwitterLargeCard(content=mock.Mock(),
                                      fullpath=mock.Mock())
@@ -404,7 +400,6 @@ class TestTwitterLargeCard(unittest.TestCase):
 class TestInstagramSquarePost(unittest.TestCase):
 
     @mock.patch('nider.models.Image._set_fullpath')
-    @mock.patch('nider.models.Image._set_content')
     def setUp(self, *mocks):
         self.post = InstagramSquarePost(content=mock.Mock(),
                                         fullpath=mock.Mock())
@@ -417,7 +412,6 @@ class TestInstagramSquarePost(unittest.TestCase):
 class TestInstagramPortraitPost(unittest.TestCase):
 
     @mock.patch('nider.models.Image._set_fullpath')
-    @mock.patch('nider.models.Image._set_content')
     def setUp(self, *mocks):
         self.post = InstagramPortraitPost(content=mock.Mock(),
                                           fullpath=mock.Mock())
@@ -430,7 +424,6 @@ class TestInstagramPortraitPost(unittest.TestCase):
 class TestInstagramLandscapePost(unittest.TestCase):
 
     @mock.patch('nider.models.Image._set_fullpath')
-    @mock.patch('nider.models.Image._set_content')
     def setUp(self, *mocks):
         self.post = InstagramLandscapePost(content=mock.Mock(),
                                            fullpath=mock.Mock())
