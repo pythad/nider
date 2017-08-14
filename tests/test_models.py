@@ -83,7 +83,6 @@ class TestContentBehavior(unittest.TestCase):
         para = Paragraph(text='foo bar', fontfullpath=None)
         self.content = Content(para, header=header, linkback=linkback)
 
-
     def test_content_height(self):
         self.assertIsNotNone(self.content.height)
 
@@ -123,6 +122,38 @@ class TestImageInitializationMethods(unittest.TestCase):
                 with self.assertRaises(AttributeError):
                     Image._set_image_size(self.image_mock, invalid_size[
                         0], invalid_size[1])
+
+    def test_set_title_with_title_provided(self):
+        Image._set_title(self.image_mock, 'foo')
+        self.assertEqual(self.image_mock.title, 'foo')
+
+    def test_set_title_without_title_provided_but_with_header(self):
+        header = Header('title')
+        content = Content(header=header)
+        Image._set_content(self.image_mock, content)
+        Image._set_title(self.image_mock, '')
+        self.assertEqual(self.image_mock.title, 'title')
+
+    def test_set_title_default_behavior(self):
+        self.image_mock.content.header.text = None
+        Image._set_title(self.image_mock, '')
+        self.assertEqual(self.image_mock.title, '')
+
+    def test_set_description_with_description_provided(self):
+        Image._set_description(self.image_mock, 'foo')
+        self.assertEqual(self.image_mock.description, 'foo')
+
+    def test_set_description_without_description_provided_but_with_para(self):
+        para = Paragraph('description')
+        content = Content(paragraph=para)
+        Image._set_content(self.image_mock, content)
+        Image._set_description(self.image_mock, '')
+        self.assertEqual(self.image_mock.description, 'description')
+
+    def test_set_description_default_behavior(self):
+        self.image_mock.content.para.text = None
+        Image._set_description(self.image_mock, '')
+        self.assertEqual(self.image_mock.description, '')
 
 
 class TestImageBaseMethods(unittest.TestCase):

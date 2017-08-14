@@ -202,7 +202,7 @@ After the content is prepared it's the right time to initialize an image. In ``n
 ``nider.models.Image``
 ========================
 
-.. class:: Image(content, fullpath, width=1080, height=1080)
+.. class:: Image(content, fullpath, width=1080, height=1080, title=None, description=None)
 
     Base class for a text based image
 
@@ -210,6 +210,8 @@ After the content is prepared it's the right time to initialize an image. In ``n
     :param str fullpath: Path where the image has to be saved
     :param int width: Width of the image
     :param int height: Height of the image
+    :param str title: Title of the image. Serves as metadata for latter rendering in html. May be used as alt text of the image. If no ``title`` is provided ``content.header.text will`` be set as the value
+    :param str description: Description of the image. Serves as metadata for latter rendering in html. May be used as description text of the image. If no ``description`` is provided ``content.paragraph.text`` will be set as the value
     :raises AttributeError: if it's impossible to create a file at ``fullpath`` path
     :raises AttributeError: if width <= 0 or height <= 0
 
