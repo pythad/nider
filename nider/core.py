@@ -7,6 +7,26 @@ from nider.mixins import AlignMixin
 from nider.colors.utils import color_to_rgb
 
 
+class Outline:
+    '''Base class for text's outline
+
+    Attributes:
+        width (int): width of the stroke.
+        color (str): string that represents a color. Must be compatible with PIL.ImageColor color names.
+
+    .. warning::
+
+        Due to PIL limitations - core library used for drawing, nider doesn't support 'true' outlineі. That is why high width outlines will look rather ugly and we don't recommend usign outlines with width > 3.
+    '''
+
+    def __init__(self, width=2, color=None):
+        self.width = width
+        self._set_color(color)
+
+    def _set_color(self, color):
+        self.color = color_to_rgb(color) if color else None
+
+
 class Text:
     '''Base class for the text
 
@@ -14,18 +34,18 @@ class Text:
         text (str): text used in the object.
         fontfullpath (str): path to the font used in the object.
         fontsize (int): size of the font.
-        color (str): string that represents a color. Must be compatible with PIL.ImageColor
-        drop_shadow (bool): boolean flag that indicates if text has to drop shadow.
-        shadowcolor (str, tuple): either hex or rgb representation of shadowcolor color.
+        color (str): string that represents a color. Must be compatible with PIL.ImageColor.
+        outline (nider.core.Outline): nider.core.Outline object that represents text's outline.
     '''
 
     def __init__(self, text, fontfullpath,
-                 fontsize, color, drop_shadow, shadowcolor):
+                 fontsize, color, outline):
         self._set_text(text)
         self.fontfullpath = fontfullpath
         self.fontsize = fontsize
         self._set_font()
-        self._set_decoration(color, drop_shadow, shadowcolor)
+        self._set_color(color)
+        self.outline = outline
 
     def _set_text(self, text):
         '''Sets object's text data'''
@@ -35,22 +55,9 @@ class Text:
         '''Sets object's font'''
         self.font = get_font(self.fontfullpath, self.fontsize)
 
-    def _set_decoration(self, color, drop_shadow, shadowcolor):
-        '''Sets object's color and shadow'''
-        if color:
-            self.color = color_to_rgb(color)
-        else:
-            self.auto_color = True
-            self.color = None
-        self.drop_shadow = drop_shadow
-        if drop_shadow is True:
-            if shadowcolor:
-                self.shadowcolor = color_to_rgb(shadowcolor)
-            else:
-                self.auto_shadowcolor = True
-                self.shadowcolor = None
-        else:
-            self.shadowcolor = None
+    def _set_color(self, color):
+        '''Sets object's color and outline'''
+        self.color = color_to_rgb(color) if color else None
 
 
 class MultilineText(MultilineTextMixin, Text):
@@ -67,13 +74,12 @@ class SingleLineTextUnit(AlignMixin, Text):
 
     def __init__(self, text, fontfullpath=None,
                  fontsize=18, align='right',
-                 color=None, drop_shadow=False, shadowcolor=None
+                 color=None, outline=None
                  ):
         AlignMixin.__init__(self, align=align)
         Text.__init__(
             self, text=text, fontfullpath=fontfullpath, fontsize=fontsize,
-            color=color, drop_shadow=drop_shadow,
-            shadowcolor=shadowcolor
+            color=color, outline=outline
         )
         self._set_height()
 
@@ -88,14 +94,13 @@ class MultilineTextUnit(AlignMixin, MultilineText):
     def __init__(self, text,
                  fontfullpath=None, fontsize=18,
                  text_width=21, line_padding=6,
-                 color=None, drop_shadow=False, shadowcolor=None,
+                 color=None, outline=None,
                  align='center'):
         AlignMixin.__init__(self, align=align)
         MultilineText.__init__(self, text=text,
                                fontfullpath=fontfullpath, fontsize=fontsize,
                                text_width=text_width, line_padding=line_padding,
-                               color=color, drop_shadow=drop_shadow,
-                               shadowcolor=shadowcolor
+                               color=color, outline=outline
                                )
         self._set_unit()
 

@@ -28,7 +28,7 @@ Each of the units is represented by a class in ``nider.models``:
 .. class:: Header(text, \
                  fontfullpath=None, fontsize=18, \
                  text_width=21, line_padding=6, \
-                 color=None, drop_shadow=False, shadowcolor=None, \
+                 color=None, outline=None \
                  align='center')
 
     Base class for the header unit
@@ -39,8 +39,7 @@ Each of the units is represented by a class in ``nider.models``:
     :param int line_padding: Header's line padding - padding (in pixels) between the lines
     :param int fontsize: Size of the font
     :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
-    :param bool drop_shadow: Boolean flag that indicates if text has to drop shadow
-    :param str shadowcolor: string that represents a shadow color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
+    :param nider.core.Outline outline: :class:`nider.core.Outline` object that represents text's outline
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :raises nider.exceptions.InvalidAlignException: if ``align`` is not one of 'left' or 'center' or 'right'
@@ -52,6 +51,7 @@ Example
 
 .. code-block:: python
 
+    from nider.core import Outline
     from nider.models import Header
 
     header = Header(text='Your super interesting title!',
@@ -59,7 +59,8 @@ Example
                     fontsize=30,
                     text_width=40,
                     align='left',
-                    color='#ededed'
+                    color='#ededed',
+                    outline=Oultine(2, '#222')
                     )
 
 
@@ -71,7 +72,7 @@ The class has the same attribures and behaviour as ``nider.models.Header``.
 .. class:: Paragraph(text, \
                  fontfullpath=None, fontsize=18, \
                  text_width=21, line_padding=6, \
-                 color=None, drop_shadow=False, shadowcolor=None, \
+                 color=None, outline=None, \
                  align='center')
 
     Base class for the paragraph unit
@@ -82,8 +83,7 @@ The class has the same attribures and behaviour as ``nider.models.Header``.
     :param int line_padding: Paragraph's line padding - padding (in pixels) between the lines
     :param int fontsize: Size of the font
     :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
-    :param bool drop_shadow: Boolean flag that indicates if text has to drop shadow
-    :param str shadowcolor: string that represents a shadow color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
+    :param nider.core.Outline outline: :class:`nider.core.Outline` object that represents text's outline
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :raises nider.exceptions.InvalidAlignException: if ``align`` is not one of 'left' or 'center' or 'right'
@@ -95,6 +95,7 @@ Example
 
 .. code-block:: python
 
+    from nider.core import Outline
     from nider.models import Paragraph
 
     para = Paragraph(text='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
@@ -103,6 +104,7 @@ Example
                      text_width=65,
                      align='left',
                      color='#ededed'
+                     outline=Oultine(1, '#000')
                      )
 
 
@@ -111,7 +113,7 @@ Example
 
 .. class:: Linkback(text, \
                  fontfullpath=None, fontsize=18, \
-                 color=None, drop_shadow=False, shadowcolor=None, \
+                 color=None, outline=None, \
                  align='center', bottom_padding=20)
 
     Base class for the linkback unit
@@ -120,8 +122,7 @@ Example
     :param str fontfullpath: Path to the font used in the linkback
     :param int fontsize: Size of the font
     :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
-    :param bool drop_shadow: Boolean flag that indicates if text has to drop shadow
-    :param str shadowcolor: string that represents a shadow color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
+    :param nider.core.Outline outline: :class:`nider.core.Outline` object that represents text's outline
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :param int bottom_padding: Linkback's bottom padding - padding (in pixels) between the bottom of the image and the linkback itself
@@ -134,19 +135,21 @@ Example
 
 .. code-block:: python
 
+    from nider.core import Outline
     from nider.models import Linkback
 
     linkback = Linkback(text='foo.com | @username',
                         fontfullpath='/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf',
                         fontsize=24,
-                        color='#ededed'
+                        color='#ededed',
+                        outline=Oultine(2, '#000')
                         )
 
 ------------
 
 .. note::
 
-    Parameters ``color`` and ``shadowcolor`` are optional for any unit. They can be generated automatically by ``nider``. ``nider`` analyzes background color of either a texture or of an image and chooses an opposite one to it. So if your image in mainly dark , white text color will be auto generated and set. The same applies to shadow color.
+    Parameters ``color`` and ``outline.color`` are optional for any unit. They can be generated automatically by ``nider``. ``nider`` analyzes background color of either a texture or of an image and chooses an opposite one to it. So if your image in mainly dark , white text color will be auto generated and set. The same applies to outline color.
 
     Although it's a nice feature for backgrounds you have no control over, we'd recommend to provide colors explicitly.
 

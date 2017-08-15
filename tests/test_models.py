@@ -9,6 +9,7 @@ from PIL import ImageDraw
 from PIL import ImageEnhance
 from PIL import ImageFilter
 
+from nider.core import Outline
 from nider.core import MultilineTextUnit
 
 from nider.models import Content
@@ -38,6 +39,7 @@ class TestLinkback(unittest.TestCase):
         self.linkback = Linkback(text='foo', fontfullpath=None)
 
     def test_set_height(self):
+        # height of the default font
         self.assertEqual(self.linkback.height, 31)
 
 
@@ -135,8 +137,8 @@ class TestImageInitializationMethods(unittest.TestCase):
         self.assertEqual(self.image_mock.title, 'title')
 
     def test_set_title_default_behavior(self):
-        self.image_mock.content.header.text = None
-        Image._set_title(self.image_mock, '')
+        self.image_mock.content.header = None
+        Image._set_title(self.image_mock, None)
         self.assertEqual(self.image_mock.title, '')
 
     def test_set_description_with_description_provided(self):
@@ -151,8 +153,8 @@ class TestImageInitializationMethods(unittest.TestCase):
         self.assertEqual(self.image_mock.description, 'description')
 
     def test_set_description_default_behavior(self):
-        self.image_mock.content.para.text = None
-        Image._set_description(self.image_mock, '')
+        self.image_mock.content.para = None
+        Image._set_description(self.image_mock, None)
         self.assertEqual(self.image_mock.description, '')
 
 
@@ -263,9 +265,9 @@ class TestImageBaseMethods(unittest.TestCase):
 class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
 
     def setUp(self):
-        header = Header(text='foo', fontfullpath=None)
-        linkback = Linkback(text='bar', fontfullpath=None)
-        para = Paragraph(text='foo bar', fontfullpath=None)
+        header = Header(text='foo', fontfullpath=None, outline=Outline())
+        linkback = Linkback(text='bar', fontfullpath=None, outline=Outline())
+        para = Paragraph(text='foo bar', fontfullpath=None, outline=Outline())
         content = Content(para, header=header, linkback=linkback, padding=45)
         self.fullpath = 'test.png'
         self.img = Image(content, self.fullpath)
@@ -337,7 +339,7 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
         self.img._prepare_content()
         for unit in [content.header, content.para, content.linkback]:
             self.assertIsNotNone(unit.color)
-            self.assertIsNotNone(unit.shadowcolor)
+            self.assertIsNotNone(unit.outline.color)
 
     def test_prepare_content_with_None_units(self):
         content = self.img.content
@@ -345,7 +347,7 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
         content.linkback = None
         self.img._prepare_content()
         self.assertIsNotNone(content.para.color)
-        self.assertIsNotNone(content.para.shadowcolor)
+        self.assertIsNotNone(content.para.outline.color)
 
     @mock.patch('nider.models.Image._draw_linkback')
     @mock.patch('nider.models.Image._draw_para')
@@ -358,19 +360,16 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
         self.assertTrue(_draw_linkback_mock.called)
 
     @mock.patch('PIL.ImageDraw.ImageDraw.text')
-    def test_draw_unit(self, text_mock):
-        drop_shadow_options = [True, False]
+    def test_draw_unit_with_outline(self, text_mock):
+        available_outlines = [None, Outline(2, '#111')]
         self.img.color = '#000'
         start_height = 0
         aligns = ['center', 'right', 'left']
         for align in aligns:
-            for drop_shadow_option in drop_shadow_options:
-                self.img.drop_shadow = drop_shadow_option
-                if drop_shadow_option:
-                    self.img.shadowcolor = '#000'
+            for outline in available_outlines:
                 with self.subTest():
                     unit = MultilineTextUnit(
-                        text='foo', fontfullpath=None, drop_shadow=drop_shadow_option,
+                        text='foo', fontfullpath=None, outline=outline,
                         align=align)
                     self.img._draw_unit(start_height, unit)
                     self.assertTrue(text_mock.called)
