@@ -63,6 +63,9 @@ coverage: ## check code coverage quickly with the default Python
 	coverage html
 	$(BROWSER) htmlcov/index.html
 
+build_docs: ## run sphinx build on docs/ directory
+	sphinx-build -b html docs/ docs/_build
+
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/nider.rst
 	rm -f docs/modules.rst
