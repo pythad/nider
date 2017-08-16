@@ -41,10 +41,10 @@ Creating a simple image is as easy as
 
 .. code-block:: python
 
-    from nider.models import Content
     from nider.models import Header
-    from nider.models import Linkback
     from nider.models import Paragraph
+    from nider.models import Linkback
+    from nider.models import Content
     from nider.models import Image
 
     header = Header('Your super interesting title!')
@@ -56,31 +56,29 @@ Creating a simple image is as easy as
 
     img.draw_on_bg('#212121')
 
-*********************
-Drawn using ``nider``
-*********************
+***************
+Featured images
+***************
 
-On a textture
-=============
-
-.. image:: https://github.com/pythad/nider/raw/master/examples/draw_on_texture_example/result.png
-        :alt: Draw on texture example
-
-On a solid color
-================
-
-.. image:: https://github.com/pythad/nider/raw/master/examples/draw_on_bg_example/result.png
-        :alt: Draw on background example
-        :height: 500px
-        :width: 500px
-
-On an image
-===========
-
-.. image:: https://github.com/pythad/nider/raw/master/examples/draw_on_image_example/result.png
-        :alt: Draw on image example
+All of the featured images were drawn using ``nider`` package. Code used to generate them can be found `here <https://github.com/pythad/nider/tree/master/examples>`_.
 
 
-===================
+Example 1
+========
+.. image:: https://github.com/pythad/nider/raw/master/examples/example1/result.png
+        :alt: example1
 
-Code used to generate featured images can be found `here <https://github.com/pythad/nider/tree/master/examples>`_
+Example 2
+========
+.. image:: https://github.com/pythad/nider/raw/master/examples/example2/result.png
+        :alt: example2
+
+Example 3
+========
+.. image:: https://github.com/pythad/nider/raw/master/examples/example3/result.png
+        :alt: example3
+
+Example 4
+========
+.. image:: https://github.com/pythad/nider/raw/master/examples/example4/result.png
+        :alt: example4
