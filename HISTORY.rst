@@ -13,3 +13,11 @@ History
 
 * Added ``PIL.ImageEnhance`` and ``PIL.ImageFilter`` built-in support
 * Enabled auto color generation for unit colors
+
+
+0.3.0 (2017-08-17)
+------------------
+
+* Dropped shadow support for units
+* Added outline support for units
+* Made unit's font config as a separate class
