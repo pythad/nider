@@ -9,6 +9,7 @@ from PIL import ImageDraw
 from PIL import ImageEnhance
 from PIL import ImageFilter
 
+from nider.core import Font
 from nider.core import Outline
 from nider.core import MultilineTextUnit
 
@@ -36,7 +37,7 @@ from nider.exceptions import ImageGeneratorException
 class TestLinkback(unittest.TestCase):
 
     def setUp(self):
-        self.linkback = Linkback(text='foo', fontfullpath=None)
+        self.linkback = Linkback(text='foo')
 
     def test_set_height(self):
         # height of the default font
@@ -50,27 +51,27 @@ class TestContent(unittest.TestCase):
             Content()
 
     def test_depending_on_opposite_to_bg_color(self):
-        header = Header(text='foo', fontfullpath=None)
-        linkback = Linkback(text='bar', fontfullpath=None)
-        para = Paragraph(text='foo bar', fontfullpath=None)
+        header = Header(text='foo')
+        linkback = Linkback(text='bar')
+        para = Paragraph(text='foo bar')
         content = Content(para, header=header, linkback=linkback)
         single_unit_content = Content(para)
         self.assertTrue(content.depends_on_opposite_to_bg_color)
         self.assertTrue(single_unit_content.depends_on_opposite_to_bg_color)
 
     def test_depending_on_opposite_to_bg_color_with_one_dependency(self):
-        header = Header(text='foo', fontfullpath=None, color='#000')
-        linkback = Linkback(text='bar', fontfullpath=None)
-        para = Paragraph(text='foo bar', fontfullpath=None, color='#000')
+        header = Header(text='foo', color='#000')
+        linkback = Linkback(text='bar')
+        para = Paragraph(text='foo bar', color='#000')
         content = Content(para, header=header, linkback=linkback)
         single_unit_content = Content(para)
         self.assertTrue(content.depends_on_opposite_to_bg_color)
         self.assertFalse(single_unit_content.depends_on_opposite_to_bg_color)
 
     def test_depending_on_opposite_to_bg_color_without_dependencies(self):
-        header = Header(text='foo', fontfullpath=None, color='#000')
-        linkback = Linkback(text='bar', fontfullpath=None, color='#000')
-        para = Paragraph(text='foo bar', fontfullpath=None, color='#000')
+        header = Header(text='foo', color='#000')
+        linkback = Linkback(text='bar', color='#000')
+        para = Paragraph(text='foo bar', color='#000')
         content = Content(para, header=header, linkback=linkback)
         single_unit_content = Content(para)
         self.assertFalse(content.depends_on_opposite_to_bg_color)
@@ -80,9 +81,9 @@ class TestContent(unittest.TestCase):
 class TestContentBehavior(unittest.TestCase):
 
     def setUp(self):
-        header = Header(text='foo', fontfullpath=None)
-        linkback = Linkback(text='bar', fontfullpath=None)
-        para = Paragraph(text='foo bar', fontfullpath=None)
+        header = Header(text='foo')
+        linkback = Linkback(text='bar')
+        para = Paragraph(text='foo bar')
         self.content = Content(para, header=header, linkback=linkback)
 
     def test_content_height(self):
@@ -95,7 +96,7 @@ class TestImageInitializationMethods(unittest.TestCase):
         self.image_mock = mock.Mock()
 
     def test_set_content(self):
-        para = Paragraph(text='foo bar', fontfullpath=None)
+        para = Paragraph(text='foo bar')
         content = Content(para)
         Image._set_content(self.image_mock, content)
         self.assertEqual(self.image_mock.content, content)
@@ -161,9 +162,9 @@ class TestImageInitializationMethods(unittest.TestCase):
 class TestImageBaseMethods(unittest.TestCase):
 
     def setUp(self):
-        header = Header(text='foo', fontfullpath=None)
-        linkback = Linkback(text='bar', fontfullpath=None)
-        para = Paragraph(text='foo bar', fontfullpath=None)
+        header = Header(text='foo')
+        linkback = Linkback(text='bar')
+        para = Paragraph(text='foo bar')
         content = Content(para, header=header, linkback=linkback)
         fullpath = 'test.png'
         self.img = Image(content, fullpath)
@@ -265,9 +266,9 @@ class TestImageBaseMethods(unittest.TestCase):
 class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
 
     def setUp(self):
-        header = Header(text='foo', fontfullpath=None, outline=Outline())
-        linkback = Linkback(text='bar', fontfullpath=None, outline=Outline())
-        para = Paragraph(text='foo bar', fontfullpath=None, outline=Outline())
+        header = Header(text='foo')
+        linkback = Linkback(text='bar')
+        para = Paragraph(text='foo bar')
         content = Content(para, header=header, linkback=linkback, padding=45)
         self.fullpath = 'test.png'
         self.img = Image(content, self.fullpath)
@@ -335,6 +336,9 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
                 self.assertTrue(mock.called)
 
     def test_prepare_content(self):
+        self.img.content.header.outline = Outline()
+        self.img.content.para.outline = Outline()
+        self.img.content.linkback.outline = Outline()
         content = self.img.content
         self.img._prepare_content()
         for unit in [content.header, content.para, content.linkback]:
@@ -342,6 +346,7 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
             self.assertIsNotNone(unit.outline.color)
 
     def test_prepare_content_with_None_units(self):
+        self.img.content.para.outline = Outline()
         content = self.img.content
         content.header = None
         content.linkback = None
@@ -369,7 +374,7 @@ class TestImageMethodsThatRequireImageAndDraw(unittest.TestCase):
             for outline in available_outlines:
                 with self.subTest():
                     unit = MultilineTextUnit(
-                        text='foo', fontfullpath=None, outline=outline,
+                        text='foo', outline=outline,
                         align=align)
                     self.img._draw_unit(start_height, unit)
                     self.assertTrue(text_mock.called)

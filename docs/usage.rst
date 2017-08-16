@@ -26,7 +26,7 @@ Each of the units is represented by a class in ``nider.models``:
 =========================
 
 .. class:: Header(text, \
-                 fontfullpath=None, fontsize=18, \
+                 font=Font(), \
                  text_width=21, line_padding=6, \
                  color=None, outline=None \
                  align='center')
@@ -34,29 +34,28 @@ Each of the units is represented by a class in ``nider.models``:
     Base class for the header unit
 
     :param str text: Text used in the header
-    :param str fontfullpath: Path to the font used in the header
+    :param nider.core.Font font: :class:`nider.core.Font` object that represents text's font
     :param int text_width: Header's text width - number of characters in a line
     :param int line_padding: Header's line padding - padding (in pixels) between the lines
-    :param int fontsize: Size of the font
     :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param nider.core.Outline outline: :class:`nider.core.Outline` object that represents text's outline
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :raises nider.exceptions.InvalidAlignException: if ``align`` is not one of 'left' or 'center' or 'right'
-    :raises nider.exceptions.DefaultFontWarning: if ``fontfullpath`` is ``None``
-    :raises nider.exceptions.FontNotFoundWarning: if ``fontfullpath`` does not exist
+    :raises nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``
+    :raises nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist
 
 Example
 -------
 
 .. code-block:: python
 
+    from nider.core import Font
     from nider.core import Outline
     from nider.models import Header
 
     header = Header(text='Your super interesting title!',
-                    fontfullpath='/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf',
-                    fontsize=30,
+                    font=Font('/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf', 30),
                     text_width=40,
                     align='left',
                     color='#ededed',
@@ -70,37 +69,36 @@ Example
 The class has the same attribures and behaviour as ``nider.models.Header``.
 
 .. class:: Paragraph(text, \
-                 fontfullpath=None, fontsize=18, \
-                 text_width=21, line_padding=6, \
-                 color=None, outline=None, \
-                 align='center')
+                     font=Font(), \
+                     text_width=21, line_padding=6, \
+                     color=None, outline=None, \
+                     align='center')
 
     Base class for the paragraph unit
 
     :param str text: Text used in the paragraph
-    :param str fontfullpath: Path to the font used in the paragraph
+    :param nider.core.Font font: :class:`nider.core.Font` object that represents text's font
     :param int text_width: Paragraph's text width - number of characters in a line
     :param int line_padding: Paragraph's line padding - padding (in pixels) between the lines
-    :param int fontsize: Size of the font
     :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param nider.core.Outline outline: :class:`nider.core.Outline` object that represents text's outline
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :raises nider.exceptions.InvalidAlignException: if ``align`` is not one of 'left' or 'center' or 'right'
-    :raises nider.exceptions.DefaultFontWarning: if ``fontfullpath`` is ``None``
-    :raises nider.exceptions.FontNotFoundWarning: if ``fontfullpath`` does not exist
+    :raises nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``
+    :raises nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist
 
 Example
 -------
 
 .. code-block:: python
 
+    from nider.core import Font
     from nider.core import Outline
     from nider.models import Paragraph
 
     para = Paragraph(text='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-                    fontfullpath='/home/me/.local/share/fonts/Roboto/Roboto-Medium.ttf',
-                     fontsize=29,
+                     font=Font('/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf', 30),
                      text_width=65,
                      align='left',
                      color='#ededed'
@@ -112,35 +110,34 @@ Example
 ===========================
 
 .. class:: Linkback(text, \
-                 fontfullpath=None, fontsize=18, \
+                 font=Font(), \
                  color=None, outline=None, \
                  align='center', bottom_padding=20)
 
     Base class for the linkback unit
 
     :param str text: Text used in the linkback
-    :param str fontfullpath: Path to the font used in the linkback
-    :param int fontsize: Size of the font
+    :param nider.core.Font font: :class:`nider.core.Font` object that represents text's font
     :param str color: string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
     :param nider.core.Outline outline: :class:`nider.core.Outline` object that represents text's outline
     :param align: Side with respect to which the text will be aligned
     :type align: 'left' or 'center' or 'right'
     :param int bottom_padding: Linkback's bottom padding - padding (in pixels) between the bottom of the image and the linkback itself
     :raises nider.exceptions.InvalidAlignException: if ``align`` is not one of 'left' or 'center' or 'right'
-    :raises nider.exceptions.DefaultFontWarning: if ``fontfullpath`` is ``None``
-    :raises nider.exceptions.FontNotFoundWarning: if ``fontfullpath`` does not exist
+    :raises nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``
+    :raises nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist
 
 Example
 -------
 
 .. code-block:: python
 
+    from nider.core import Font
     from nider.core import Outline
     from nider.models import Linkback
 
     linkback = Linkback(text='foo.com | @username',
-                        fontfullpath='/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf',
-                        fontsize=24,
+                        font=Font('/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf', 30),
                         color='#ededed',
                         outline=Oultine(2, '#000')
                         )
