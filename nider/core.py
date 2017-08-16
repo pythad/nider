@@ -88,10 +88,12 @@ class MultilineText(MultilineTextMixin, Text):
 class SingleLineTextUnit(AlignMixin, Text):
     '''Base class for the single line text unit'''
 
-    def __init__(self, text, font=Font(),
+    def __init__(self, text, font=None,
                  align='right',
                  color=None, outline=None
                  ):
+        if font is None:
+            font = Font()
         AlignMixin.__init__(self, align=align)
         Text.__init__(
             self, text=text, font=font,
@@ -108,10 +110,12 @@ class MultilineTextUnit(AlignMixin, MultilineText):
     '''Base class for the multiline text unit'''
 
     def __init__(self, text,
-                 font=Font(),
+                 font=None,
                  text_width=21, line_padding=6,
                  color=None, outline=None,
                  align='center'):
+        if font is None:
+            font = Font()
         AlignMixin.__init__(self, align=align)
         MultilineText.__init__(self, text=text,
                                font=font,
