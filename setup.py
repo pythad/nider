@@ -32,7 +32,7 @@ test_requirements = [
 
 setup(
     name='nider',
-    version='0.2.0',
+    version='0.3.0',
     description="Python package to add text to images, textures and different backgrounds",
     long_description=readme + '\n\n' + history,
     author="Vladyslav Ovchynnykov",
