@@ -8,9 +8,9 @@ Nider is an approach to make generation of text based images simple yet flexible
 
    installation
    usage
+   Full API reference <nider>
    contributing
    authors
-   Full API reference <modules>
    history
 
 Indices and tables

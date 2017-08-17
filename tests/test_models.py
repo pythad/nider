@@ -9,7 +9,6 @@ from PIL import ImageDraw
 from PIL import ImageEnhance
 from PIL import ImageFilter
 
-from nider.core import Font
 from nider.core import Outline
 from nider.core import MultilineTextUnit
 
@@ -108,7 +107,7 @@ class TestImageInitializationMethods(unittest.TestCase):
 
     def test_set_fullpath_with_invalid_path(self):
         fullpath = 'non/existent/directory/test.png'
-        with self.assertRaises(AttributeError):
+        with self.assertRaises(ImageGeneratorException):
             Image._set_fullpath(self.image_mock, fullpath)
         self.assertNotEqual(self.image_mock.fullpath, fullpath)
 

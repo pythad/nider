@@ -67,9 +67,13 @@ build_docs: ## run sphinx build on docs/ directory
 	sphinx-build -b html docs/ docs/_build
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/nider.rst
-	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ nider
+	sphinx-apidoc -o docs/ -T nider
+	$(MAKE) -C docs clean
+	$(MAKE) -C docs html
+	$(BROWSER) docs/_build/html/index.html
+
+docs_force:
+	sphinx-apidoc -o docs/ -T -f nider
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html

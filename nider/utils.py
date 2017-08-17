@@ -14,11 +14,18 @@ from nider.exceptions import FontNotFoundWarning
 
 
 def get_font(fontfullpath, fontsize):
-    '''Returns a PIL ImageFont object
+    '''Function to create a truetype ``PIL.ImageFont`` that provides fallbacks for invalid arguments
 
-    Attributes:
-        fontfullpath (str): path to the desired font
-        fontsize (int): size of the font
+    Args:
+        fontfullpath (str): path to the desired font.
+        fontsize (int): size of the font.
+
+    Returns:
+        PIL.ImageFont: Default PIL ImageFont if ``fontfullpath`` is either unreachable or provided ``fontfullpath`` is ``None``.
+
+    Raises:
+        nider.exceptions.DefaultFontWarning: if ``fontfullpath`` is ``None``.
+        nider.exceptions.FontNotFoundWarning: if ``fontfullpath`` does not exist.
     '''
     if fontfullpath is None:
         warnings.warn(DefaultFontWarning())
@@ -30,9 +37,14 @@ def get_font(fontfullpath, fontsize):
 
 
 def is_path_creatable(pathname):
-    '''
-    `True` if the current user has sufficient permissions to create the passed
-    pathname; `False` otherwise.
+    '''Function to check if the current user has sufficient permissions to create the passed
+    pathname
+
+    Args:
+        pathname (str): path to check.
+
+    Returns:
+        bool: ``True`` if the current user has sufficient permissions to create the passed ``pathname``. ``False`` otherwise.
     '''
     # Parent directory of the passed path. If empty, we substitute the current
     # working directory (CWD) instead.
@@ -42,6 +54,7 @@ def is_path_creatable(pathname):
 
 @contextmanager
 def create_test_image():
+    '''Context manager to yield a ``PIL.Image``'''
     try:
         image = Image.new('RGBA', size=(50, 50), color=(155, 0, 0))
         image.save('test.png')
@@ -51,7 +64,7 @@ def create_test_image():
 
 
 def get_random_texture():
-    '''Returns the path to a random texture from the local /textures folder'''
+    '''Returns the path to a random texture from the local ``nider/textures`` folder'''
     textures_folder = os.path.dirname(
         os.path.realpath(__file__)) + '/textures'
     texture = random.choice(os.listdir(textures_folder))
@@ -60,5 +73,5 @@ def get_random_texture():
 
 
 def get_random_bgcolor():
-    '''Returns random FLAT_UI_COLOR'''
+    '''Returns random flat ui color from ``nider.colors.colormap.FLAT_UI_COLORS``'''
     return random.choice(list(FLAT_UI_COLORS.values()))

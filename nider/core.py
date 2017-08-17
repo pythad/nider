@@ -10,7 +10,7 @@ from nider.colors.utils import color_to_rgb
 class Font:
     '''Base class for text's font
 
-    Attributes:
+    Args:
         path (str): path to the font used in the object.
         size (int): size of the font.
 
@@ -32,12 +32,11 @@ class Font:
 class Outline:
     '''Base class for text's outline
 
-    Attributes:
+    Args:
         width (int): width of the stroke.
-        color (str): string that represents a color. Must be compatible with PIL.ImageColor color names.
+        color (str): string that represents outline color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_.
 
-    .. warning::
-
+    Warning:
         Due to PIL limitations - core library used for drawing, nider doesn't support 'true' outlineі. That is why high width outlines will look rather ugly and we don't recommend usign outlines with width > 3.
     '''
 
@@ -51,14 +50,7 @@ class Outline:
 
 
 class Text:
-    '''Base class for the text
-
-    Attributes:
-        text (str): text used in the object.
-        font (nider.core.Font): nider.core.Font object that represents text's font.
-        color (str): string that represents a color. Must be compatible with PIL.ImageColor.
-        outline (nider.core.Outline): nider.core.Outline object that represents text's outline.
-    '''
+    '''Base class for the text'''
 
     def __init__(self, text, font, color, outline):
         self._set_text(text)
@@ -86,11 +78,23 @@ class MultilineText(MultilineTextMixin, Text):
 
 
 class SingleLineTextUnit(AlignMixin, Text):
-    '''Base class for the single line text unit'''
+    '''
+    Args:
+        text (str): text used for the unit.
+        font (nider.core.Font): font object that represents text's font.
+        color (str): string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_.
+        outline (nider.core.Outline): outline object that represents text's outline.
+        align ('left' or 'center' or 'right'): side with respect to which the text will be aligned.
+
+    Raises:
+        nider.exceptions.InvalidAlignException: if ``align` is not supported by nider.
+        nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``.
+        nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist.
+    '''
 
     def __init__(self, text, font=None,
-                 align='right',
-                 color=None, outline=None
+                 color=None, outline=None,
+                 align='right'
                  ):
         if font is None:
             font = Font()
@@ -107,7 +111,22 @@ class SingleLineTextUnit(AlignMixin, Text):
 
 
 class MultilineTextUnit(AlignMixin, MultilineText):
-    '''Base class for the multiline text unit'''
+    '''
+    Args:
+        text (str): text used for the unit.
+        font (nider.core.Font): font object that represents text's font.
+        text_width (int): units's text width - number of characters in a line.
+        line_padding (int): unit's line padding - padding (in pixels) between the lines.
+        color (str): string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_.
+        outline (nider.core.Outline): outline object that represents text's outline.
+        align ('left' or 'center' or 'right'): side with respect to which the text will be aligned.
+
+    Raises:
+        nider.exceptions.InvalidAlignException: if ``align` is not supported by nider.
+        AttributeError: if ``text_width`` < 0.
+        nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``.
+        nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist.
+    '''
 
     def __init__(self, text,
                  font=None,
@@ -128,7 +147,7 @@ class MultilineTextUnit(AlignMixin, MultilineText):
         '''Sets a unit used in the image
 
         Sets textwraped unit's text that will be used in the image and also
-        attachs header height to the obj instance
+        attachs header height to the obj instance.
         '''
         self.wrapped_lines = textwrap.wrap(self.text, width=self.text_width)
         self._set_height()
@@ -136,7 +155,7 @@ class MultilineTextUnit(AlignMixin, MultilineText):
     def _set_height(self):
         '''Sets unit's height used in the image
 
-        Calculates unit's height by adding height of each line and its padding
+        Calculates unit's height by adding height of each line and its padding.
         '''
         self.height = 0
         for line in self.wrapped_lines:
