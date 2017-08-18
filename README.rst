@@ -2,20 +2,29 @@
 nider
 =====
 
-.. image:: https://img.shields.io/pypi/v/nider.svg
-        :target: https://pypi.python.org/pypi/nider
-
 .. image:: https://img.shields.io/travis/pythad/nider.svg
         :target: https://travis-ci.org/pythad/nider
+        :alt: Travis build
+
+.. image:: https://img.shields.io/pypi/pyversions/nider.svg
+        :target: https://pypi.python.org/pypi/nider
+        :alt: Supported python versions
+
+.. image:: https://img.shields.io/pypi/v/nider.svg
+        :target: https://pypi.python.org/pypi/nider
+        :alt: PyPI version
 
 .. image:: https://readthedocs.org/projects/nider/badge/?version=latest
         :target: https://nider.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
 .. image:: https://pyup.io/repos/github/pythad/nider/shield.svg
-     :target: https://pyup.io/repos/github/pythad/nider/
-     :alt: Updates
+        :target: https://pyup.io/repos/github/pythad/nider/
+        :alt: Updates
 
+.. image:: https://img.shields.io/github/license/pythad/nider.svg
+        :target: https://pypi.python.org/pypi/nider
+        :alt: License
 
 Python package to add text to images, textures and different backgrounds
 
