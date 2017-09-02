@@ -3,6 +3,10 @@
 
 """The setup script."""
 
+import pip
+
+from pip.req import parse_requirements
+
 from setuptools import setup, find_packages
 
 with open('README.rst') as readme_file:
@@ -11,24 +15,18 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    'appdirs',
-    'colorthief',
-    'coverage',
-    'olefile',
-    'packaging',
-    'Pillow',
-    'pyparsing',
-    'six',
-]
+parsed_requirements = parse_requirements(
+    'requirements/prod.txt',
+    session=pip.download.PipSession()
+)
 
-setup_requirements = [
-    # TODO(pythad): put setup requirements (distutils extensions, etc.) here
-]
+parsed_test_requirements = parse_requirements(
+    'requirements/test.txt',
+    session=pip.download.PipSession()
+)
 
-test_requirements = [
-    # TODO: put package test requirements here
-]
+requirements = [str(ir.req) for ir in parsed_requirements]
+test_requirements = [str(tr.req) for tr in parsed_test_requirements]
 
 setup(
     name='nider',
@@ -55,5 +53,4 @@ setup(
     ],
     test_suite='tests',
     tests_require=test_requirements,
-    setup_requires=setup_requirements,
 )
