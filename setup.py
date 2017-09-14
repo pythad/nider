@@ -30,7 +30,7 @@ test_requirements = [str(tr.req) for tr in parsed_test_requirements]
 
 setup(
     name='nider',
-    version='0.3.5',
+    version='0.4.0',
     description="Python package to add text to images, textures and different backgrounds",
     long_description=readme + '\n\n' + history,
     author="Vladyslav Ovchynnykov",
