@@ -26,13 +26,13 @@ nider
         :target: https://pypi.python.org/pypi/nider
         :alt: License
 
-Python package to add text to images, textures and different backgrounds
+Python package for text images generation and watermarking
 
 
 * Free software: MIT license
 * Documentation: https://nider.readthedocs.io.
 
-``nider`` is an approach to make generation of text based images simple yet flexible. Creating of an image is as simple as describing units you want to be rendered to the image and choosing a method that will be used for drawing.
+``nider`` is an approach to make generation of text images simple yet flexible. Creating of an image is as simple as describing units you want to be rendered to the image and choosing a method that will be used for drawing.
 
 ************
 Installation
@@ -73,21 +73,32 @@ All of the featured images were drawn using ``nider`` package. Code used to gene
 
 
 Example 1
-========
+=========
 .. image:: https://github.com/pythad/nider/raw/master/examples/example1/result.png
         :alt: example1
 
 Example 2
-========
+=========
 .. image:: https://github.com/pythad/nider/raw/master/examples/example2/result.png
         :alt: example2
 
 Example 3
-========
+=========
 .. image:: https://github.com/pythad/nider/raw/master/examples/example3/result.png
         :alt: example3
 
 Example 4
-========
+=========
 .. image:: https://github.com/pythad/nider/raw/master/examples/example4/result.png
         :alt: example4
+
+Watermark example 1
+===================
+.. image:: https://github.com/pythad/nider/raw/master/examples/add_watermark_example/result.jpg
+        :alt: add_watermark_example
+
+Watermark example 2
+===================
+.. image:: https://github.com/pythad/nider/raw/master/examples/draw_on_bg_with_watermark_example/result.png
+        :alt: draw_on_bg_with_watermark_example
+

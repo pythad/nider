@@ -25,6 +25,14 @@ class FontNotFoundWarning(ImageGeneratorWarning):
             "Font {} hasn't been found. Default font has been set instead".format(fontpath_provided))
 
 
+class FontNotFoundException(ImageGeneratorWarning):
+    '''Exception raised when font cannot be found'''
+
+    def __init__(self, fontpath_provided):
+        super().__init__(
+            "Font {} hasn't been found.".format(fontpath_provided))
+
+
 class DefaultFontWarning(ImageGeneratorWarning):
     '''Warning raised when default font was used'''
 

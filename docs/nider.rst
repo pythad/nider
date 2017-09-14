@@ -11,7 +11,7 @@ nider\.models module
 --------------------
 
 .. automodule:: nider.models
-    :members: Header, Paragraph, Linkback, Content, Image, FacebookSquarePost, FacebookLandscapePost, TwitterPost, TwitterLargeCard, InstagramSquarePost, InstagramPortraitPost, InstagramLandscapePost
+    :members: Header, Paragraph, Linkback, Watermark, Content, Image, FacebookSquarePost, FacebookLandscapePost, TwitterPost, TwitterLargeCard, InstagramSquarePost, InstagramPortraitPost, InstagramLandscapePost
 
 nider\.exceptions module
 ------------------------

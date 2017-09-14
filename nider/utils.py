@@ -29,11 +29,16 @@ def get_font(fontfullpath, fontsize):
     '''
     if fontfullpath is None:
         warnings.warn(DefaultFontWarning())
-        return ImageFont.load_default()
+        font = ImageFont.load_default()
+        font.is_default = True
     elif not os.path.exists(fontfullpath):
         warnings.warn(FontNotFoundWarning(fontfullpath))
-        return ImageFont.load_default()
-    return ImageFont.truetype(fontfullpath, fontsize)
+        font = ImageFont.load_default()
+        font.is_default = True
+    else:
+        font = ImageFont.truetype(fontfullpath, fontsize)
+        font.is_default = False
+    return font
 
 
 def is_path_creatable(pathname):

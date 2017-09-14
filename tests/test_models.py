@@ -9,6 +9,7 @@ from PIL import ImageDraw
 from PIL import ImageEnhance
 from PIL import ImageFilter
 
+from nider.core import Font
 from nider.core import Outline
 from nider.core import MultilineTextUnit
 
@@ -21,6 +22,7 @@ from nider.models import InstagramLandscapePost
 from nider.models import InstagramPortraitPost
 from nider.models import InstagramSquarePost
 from nider.models import Linkback
+from nider.models import Watermark
 from nider.models import Paragraph
 from nider.models import TwitterLargeCard
 from nider.models import TwitterPost
@@ -41,6 +43,13 @@ class TestLinkback(unittest.TestCase):
     def test_set_height(self):
         # height of the default font
         self.assertEqual(self.linkback.height, 31)
+
+
+class TestWatermarkBehavior(unittest.TestCase):
+
+    def test_watermark_initialization_with_default_font(self):
+        with self.assertRaises(ImageGeneratorException):
+            Watermark(text='foo', font=Font())
 
 
 class TestContent(unittest.TestCase):

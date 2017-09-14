@@ -4,6 +4,7 @@ from nider.utils import get_font
 
 from nider.mixins import MultilineTextMixin
 from nider.mixins import AlignMixin
+
 from nider.colors.utils import color_to_rgb
 
 
@@ -18,6 +19,7 @@ class Font:
         nider.exceptions.DefaultFontWarning: if ``path`` is ``None``.
         nider.exceptions.FontNotFoundWarning: if ``path`` does not exist.
     '''
+    is_default = False
 
     def __init__(self, path=None, size=18):
         self.path = path
@@ -27,6 +29,7 @@ class Font:
     def _set_font(self):
         '''Sets object's font'''
         self.font = get_font(self.path, self.size)
+        self.is_default = self.font.is_default
 
 
 class Outline:
@@ -50,7 +53,17 @@ class Outline:
 
 
 class Text:
-    '''Base class for the text'''
+    '''
+    Args:
+        text (str): text to use.
+        font (nider.core.Font): font object that represents text's font.
+        color (str): string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
+        outline (nider.core.Outline): outline object that represents text's outline.
+
+    Raises:
+        nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``.
+        nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist.
+    '''
 
     def __init__(self, text, font, color, outline):
         self._set_text(text)
@@ -69,7 +82,19 @@ class Text:
 
 
 class MultilineText(MultilineTextMixin, Text):
-    '''Base class for the multiline text'''
+    '''
+    Args:
+        text (str): text used for the unit.
+        font (nider.core.Font): font object that represents text's font.
+        text_width (int): units's text width - number of characters in a line.
+        line_padding (int): unit's line padding - padding (in pixels) between the lines.
+        color (str): string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_.
+        outline (nider.core.Outline): outline object that represents text's outline.
+
+    Raises:
+        AttributeError: if ``text_width`` < 0.
+        nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``.
+        nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist.'''
 
     def __init__(self, text_width, line_padding, *args, **kwargs):
         MultilineTextMixin.__init__(

@@ -4,7 +4,10 @@ import warnings
 
 from PIL import Image as PIL_Image
 from PIL import ImageDraw
+from PIL import ImageEnhance
 
+from nider.core import Font
+from nider.core import Text
 from nider.core import MultilineTextUnit
 from nider.core import SingleLineTextUnit
 
@@ -45,7 +48,7 @@ class Linkback(SingleLineTextUnit):
         bottom_padding (int): linkback’s bottom padding - padding (in pixels) between the bottom of the image and the linkback itself.
 
     Raises:
-        nider.exceptions.InvalidAlignException: if ``align` is not supported by nider.
+        nider.exceptions.InvalidAlignException: if ``align`` is not supported by nider.
         nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``.
         nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist.
     '''
@@ -63,6 +66,61 @@ class Linkback(SingleLineTextUnit):
         self.height += self.bottom_padding
 
 
+class Watermark(Text):
+    '''Class that represents a watermark used in images
+
+    Args:
+        text (str): text to use.
+        font (nider.core.Font): font object that represents text's font.
+        color (str): string that represents a color. Must be compatible with `PIL.ImageColor <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html>`_ `color names <http://pillow.readthedocs.io/en/latest/reference/ImageColor.html#color-names>`_
+        outline (nider.core.Outline): outline object that represents text's outline.
+        cross (bool): boolean flag that indicates whether watermark has to be drawn with a cross.
+        rotate_angle (int): angle to which watermark's text has to be rotated.
+        opacity (0 <= float <= 1): opacity level of the watermark (applies to both the text and the cross).
+
+    Raises:
+        nider.exceptions.ImageGeneratorException: if ``font`` is the default font.
+        nider.exceptions.DefaultFontWarning: if ``font.path`` is ``None``.
+        nider.exceptions.FontNotFoundWarning: if ``font.path`` does not exist.
+
+    Note:
+        Watermark tries to takes all available width of the image so providing ``font.size`` has no affect on the watermark.
+    '''
+
+    def __init__(self, text, font,
+                 color=None, outline=None,
+                 cross=True, rotate_angle=None,
+                 opacity=0.25):
+        if font.is_default:
+            raise ImageGeneratorException(
+                'Watermark cannot be drawn using a default font. Please provide an existing font')
+        super().__init__(text=text, font=font, color=color, outline=outline)
+        self.cross = cross
+        self.rotate_angle = rotate_angle
+        self.opacity = opacity
+
+    def _adjust_fontsize(self, bg_image):
+        text_width, text_height = self.font.getsize(self.text)
+        angle = self.rotate_angle
+
+        # If the width of the image is bigger than the height of the image and we rotate
+        # our watermark it may go beyond the bounding box of the original image,
+        # that's why we need to take into consideration the actual width of the rotated
+        # waterwark inside the original image's bounding box
+        bg_image_w, bg_image_h = bg_image.size
+        if angle and (bg_image_w > bg_image_h):
+            max_wm_w = 2 * \
+                abs(bg_image_h / (2 * math.sin(math.radians(angle))))
+        else:
+            max_wm_w = bg_image_w
+
+        while text_width + text_height < max_wm_w:
+            self.font_object = Font(
+                self.font_object.path, self.font_object.size + 1)
+            self.font = self.font_object.font
+            text_width, text_height = self.font.getsize(self.text)
+
+
 class Content:
     '''Class that aggregates different units into a sigle object
 
@@ -70,6 +128,7 @@ class Content:
         paragraph (nider.models.Paragraph): paragraph used for in the content.
         header (nider.models.Header): header used for in the content.
         linkback (nider.models.Linkback): linkback used for in the content.
+        watermark (nider.models.Watermark): watermark used for in the content.
         padding (int): content's padding - padding (in pixels) between the units.
 
     Raises:
@@ -85,17 +144,18 @@ class Content:
     # but it may changed by in Img._fix_image_size()
     fits = True
 
-    def __init__(self, paragraph=None, header=None, linkback=None, padding=45):
-        if not any((paragraph, header, linkback)):
+    def __init__(self, paragraph=None, header=None, linkback=None, watermark=None, padding=45):
+        if not any((paragraph, header, linkback, watermark)):
             raise ImageGeneratorException(
                 'Content has to consist at least of one unit.')
         self.para = paragraph
         self.header = header
         self.linkback = linkback
+        self.watermark = watermark
         self.padding = padding
         self.depends_on_opposite_to_bg_color = not all(
             unit.color for unit in [
-                self.para, self.header, self.linkback
+                self.para, self.header, self.linkback, self.watermark
             ] if unit
         )
         self._set_content_height()
@@ -123,7 +183,7 @@ class Image:
         description (str): description of the image. Serves as metadata for latter rendering in html. May be used as description text of the image. If no description is provided ``content.paragraph.text`` will be set as the value.
 
     Raises:
-        nider.exceptions.ImageGeneratorException: if the current user has sufficient permissions to create the file at passed ``fullpath``.
+        nider.exceptions.ImageGeneratorException: if the current user doesn't have sufficient permissions to create the file at passed ``fullpath``.
         AttributeError: if width <= 0 or height <= 0.
     '''
 
@@ -224,6 +284,7 @@ class Image:
         self.header = content.header
         self.para = content.para
         self.linkback = content.linkback
+        self.watermark = content.watermark
 
     def _set_fullpath(self, fullpath):
         '''Sets path where to save the image'''
@@ -331,6 +392,8 @@ class Image:
             self._draw_para()
         if self.linkback:
             self._draw_linkback()
+        if self.watermark:
+            self._draw_watermark()
 
     def _draw_header(self):
         '''Draws the header on the image'''
@@ -356,6 +419,54 @@ class Image:
         '''Draws a linkback on the image'''
         current_h = self.height - self.linkback.height
         self._draw_unit(current_h, self.linkback)
+
+    def _draw_watermark(self):
+        '''Draws a watermark on the image'''
+        watermark_image = PIL_Image.new('RGBA', self.image.size, (0, 0, 0, 0))
+        self.watermark._adjust_fontsize(self.image)
+        draw = ImageDraw.Draw(watermark_image, 'RGBA')
+        w_width, w_height = self.watermark.font.getsize(self.watermark.text)
+        draw.text(((watermark_image.size[0] - w_width) / 2,
+                   (watermark_image.size[1] - w_height) / 2),
+                  self.watermark.text, font=self.watermark.font,
+                  fill=self.watermark.color)
+
+        if self.watermark.rotate_angle:
+            watermark_image = watermark_image.rotate(
+                self.watermark.rotate_angle, PIL_Image.BICUBIC)
+
+        alpha = watermark_image.split()[3]
+        alpha = ImageEnhance.Brightness(alpha).enhance(self.watermark.opacity)
+        watermark_image.putalpha(alpha)
+
+        # Because watermark can be rotated we create a separate image for cross
+        # so that it doesn't get rotated also. + It's impossible to drawn
+        # on a rotated image
+        if self.watermark.cross:
+            watermark_cross_image = PIL_Image.new(
+                'RGBA', self.image.size, (0, 0, 0, 0))
+            cross_draw = ImageDraw.Draw(watermark_cross_image, 'RGBA')
+            line_width = 1 + int(sum(self.image.size) / 2 * 0.007)
+            cross_draw.line(
+                (0, 0) + watermark_image.size,
+                fill=self.watermark.color,
+                width=line_width
+            )
+            cross_draw.line(
+                (0, watermark_image.size[1], watermark_image.size[0], 0),
+                fill=self.watermark.color,
+                width=line_width
+            )
+            watermark_cross_alpha = watermark_cross_image.split()[3]
+            watermark_cross_alpha = ImageEnhance.Brightness(
+                watermark_cross_alpha).enhance(self.watermark.opacity)
+            watermark_cross_image.putalpha(watermark_cross_alpha)
+            # Adds cross to the watermark
+            watermark_image = PIL_Image.composite(
+                watermark_cross_image, watermark_image, watermark_cross_image)
+
+        self.image = PIL_Image.composite(
+            watermark_image, self.image, watermark_image)
 
     def _draw_unit(self, start_height, unit):
         '''Draws the text and its outline on the image starting at specific height'''

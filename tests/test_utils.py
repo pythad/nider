@@ -27,11 +27,12 @@ class TestGetFont(unittest.TestCase):
     def test_existent_font(self, load_default_mock,
                            path_exists_mock, truetype_mock):
         path_exists_mock.return_value = True
-        truetype_mock.return_value = 'existent_font'
+        return_mock = mock.MagicMock()
+        truetype_mock.return_value = return_mock
         font = get_font(
             fontfullpath=os.path.abspath('/foo/bar/'),
             fontsize=15)
-        self.assertTrue(font, 'existent_font')
+        self.assertTrue(font, return_mock)
         self.assertFalse(load_default_mock.called)
 
 

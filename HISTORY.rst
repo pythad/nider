@@ -21,3 +21,11 @@ History
 * Dropped shadow support for units
 * Added outline support for units
 * Made unit's font config as a separate class
+
+
+0.4.0 (2017-09-14)
+------------------
+
+* Added ability to add watermarks to images 
+
+

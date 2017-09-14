@@ -34,7 +34,9 @@ Example
 
     from nider.core import Font
     from nider.core import Outline
+
     from nider.models import Header
+
 
     header = Header(text='Your super interesting title!',
                     font=Font('/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf', 30),
@@ -59,7 +61,9 @@ Example
 
     from nider.core import Font
     from nider.core import Outline
+
     from nider.models import Paragraph
+
 
     para = Paragraph(text='Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
                      font=Font('/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf', 30),
@@ -82,7 +86,9 @@ Example
 
     from nider.core import Font
     from nider.core import Outline
+
     from nider.models import Linkback
+
 
     linkback = Linkback(text='foo.com | @username',
                         font=Font('/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf', 30),
@@ -118,6 +124,7 @@ Example
     from nider.models import Linkback
     from nider.models import Paragraph
 
+
     para = Paragraph(...)
 
     linkback = Linkback(...)
@@ -143,6 +150,7 @@ Example
 
     from nider.models import Content
     from nider.models import Image
+
 
     content = Content(...)
 
@@ -211,6 +219,7 @@ Example
     from nider.models import Content
     from nider.models import Image
 
+
     content = Content(...)
 
     img = Image(content,
@@ -229,7 +238,7 @@ Check the full example `here <https://github.com/pythad/nider/blob/master/exampl
 ``nider`` comes with a `huge bundle of textures <https://github.com/pythad/nider/tree/master/nider/textures>`_. As for now you need to copy them to your machine if you want to use any of them.
 
 ``Image.draw_on_bg``
-=========================
+====================
 
 .. automethod:: nider.models.Image.draw_on_bg
 
@@ -240,6 +249,7 @@ Example
 
     from nider.models import Content
     from nider.models import Image
+
 
     content = Content(...)
 
@@ -254,7 +264,7 @@ Example
 Check the full example `here <https://github.com/pythad/nider/blob/master/examples/draw_on_bg_example/script.py>`_ .
 
 ``Image.draw_on_image``
-=========================
+=======================
 
 .. automethod:: nider.models.Image.draw_on_image
 
@@ -265,6 +275,7 @@ Examples
 
     from nider.models import Content
     from nider.models import Image
+
 
     content = Content(...)
 
@@ -291,3 +302,67 @@ Check the full example `here <https://github.com/pythad/nider/blob/master/exampl
 ============
 
 That's it. After any of draw methods has been called and successfully completed the new image will be saved to ``Image.fullpath``.
+
+*****************
+Adding watermarks
+*****************
+
+``nider`` comes with built-in support for adding watermarks to your images.
+
+First of all you need to create an instanse of :class:`nider.models.Watermark` class.
+
+.. autoclass:: nider.models.Watermark
+
+
+Example
+=======
+
+.. code-block:: python
+
+    watermark = Watermark(text='COPYRIGHT',
+                          font=Font('/home/me/.local/share/fonts/Roboto/Roboto-Bold.ttf'),
+                          color='#111',
+                          cross=True,
+                          rotate_angle=-45,
+                          opacity=0.35
+                          )
+
+============
+
+After this you can either add watermark to you ``Content`` instance and draw watermark on ``nider`` generated images:
+
+.. code-block:: python
+
+    from nider.models import Content
+    from nider.models import Image
+    from nider.models import Watermark
+
+
+    watermark = Watermark(...)
+
+    content = Content(..., watermark=watermark)
+
+    img = Image(content,
+                fullpath='example.png',
+                width=500,
+                height=500
+                )
+
+    img.draw_on_bg('#efefef')
+
+or you can add a watermark to an existing image using :func:`nider.tools.add_watermark`:
+
+.. autofunction:: nider.tools.add_watermark
+
+Example
+=======
+
+.. code-block:: python
+
+    from nider.models import Watermark
+
+    from nider.tools import add_watermark
+
+
+    watermark = Watermark(...)
+    add_watermark('path/to/my/img', watermark)
