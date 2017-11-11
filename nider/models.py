@@ -140,9 +140,6 @@ class Content:
     Note:
         Content has to consist at least of one unit: header, paragraph or linkback.
     '''
-    # Variable to check if the content fits into the img. Default is true,
-    # but it may changed by in Img._fix_image_size()
-    fits = True
 
     def __init__(self, paragraph=None, header=None, linkback=None, watermark=None, padding=45):
         if not any((paragraph, header, linkback, watermark)):
@@ -158,6 +155,9 @@ class Content:
                 self.para, self.header, self.linkback, self.watermark
             ] if unit
         )
+        # Variable to check if the content fits into the img. Default is true,
+        # but it may changed by in Img._fix_image_size()
+        self.fits = True
         self._set_content_height()
 
     def _set_content_height(self):
