@@ -1,11 +1,9 @@
 import functools
 
+from colorthief import ColorThief
 from PIL import ImageColor
 
-from colorthief import ColorThief
-
-from nider.colors import rgb
-from nider.colors import COLORS
+from nider.colors import rgb, COLORS
 
 
 def color_to_rgb(color):

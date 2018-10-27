@@ -1,5 +1,4 @@
-from nider.models import Image
-from nider.models import Content
+from nider.models import Image, Content
 
 
 def add_watermark(image_path, watermark, new_path=None,

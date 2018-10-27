@@ -1,11 +1,8 @@
 import unittest
-
 from unittest import mock
 
-from nider.mixins import MultilineTextMixin
-from nider.mixins import AlignMixin
-
 from nider.exceptions import InvalidAlignException
+from nider.mixins import MultilineTextMixin, AlignMixin
 
 
 class TestMultilineTextMixinInitializationMethods(unittest.TestCase):

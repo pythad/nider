@@ -1,16 +1,12 @@
 import os
-import warnings
 import random
-
+import warnings
 from contextlib import contextmanager
 
-from PIL import Image
-from PIL import ImageFont
+from PIL import Image, ImageFont
 
 from nider.colors import FLAT_UI_COLORS
-
-from nider.exceptions import DefaultFontWarning
-from nider.exceptions import FontNotFoundWarning
+from nider.exceptions import DefaultFontWarning, FontNotFoundWarning
 
 
 def get_font(fontfullpath, fontsize):

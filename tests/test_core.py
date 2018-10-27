@@ -1,13 +1,7 @@
 import unittest
-
 from unittest import mock
 
-from nider.core import Font
-from nider.core import Outline
-from nider.core import Text
-from nider.core import MultilineText
-from nider.core import SingleLineTextUnit
-from nider.core import MultilineTextUnit
+from nider.core import Font, Outline, Text, MultilineText, SingleLineTextUnit, MultilineTextUnit
 
 
 class TestFont(unittest.TestCase):

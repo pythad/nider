@@ -1,5 +1,5 @@
-from collections import namedtuple
-from collections import ChainMap
+from collections import namedtuple, ChainMap
+
 
 rgb = namedtuple('Color', ['R', 'G', 'B'])
 

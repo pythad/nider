@@ -1,10 +1,8 @@
-import unittest
 import os
-
+import unittest
 from unittest import mock
 
 from nider.exceptions import FontNotFoundWarning
-
 from nider.utils import get_font
 
 

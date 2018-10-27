@@ -1,38 +1,16 @@
 import math
 import os
 import unittest
-
 from unittest import mock
 
-from PIL import Image as PIL_Image
-from PIL import ImageDraw
-from PIL import ImageEnhance
-from PIL import ImageFilter
+from PIL import Image as PIL_Image, ImageDraw, ImageEnhance, ImageFilter
 
-from nider.core import Font
-from nider.core import Outline
-from nider.core import MultilineTextUnit
-
-from nider.models import Content
-from nider.models import FacebookLandscapePost
-from nider.models import FacebookSquarePost
-from nider.models import Header
-from nider.models import Image
-from nider.models import InstagramLandscapePost
-from nider.models import InstagramPortraitPost
-from nider.models import InstagramSquarePost
-from nider.models import Linkback
-from nider.models import Watermark
-from nider.models import Paragraph
-from nider.models import TwitterLargeCard
-from nider.models import TwitterPost
-
-
-from nider.utils import create_test_image
-from nider.utils import get_random_texture
-
-from nider.exceptions import ImageSizeFixedWarning
-from nider.exceptions import ImageGeneratorException
+from nider.core import Font, Outline, MultilineTextUnit
+from nider.exceptions import ImageSizeFixedWarning, ImageGeneratorException
+from nider.models import (Content, FacebookLandscapePost, FacebookSquarePost, Header,
+                          InstagramLandscapePost, InstagramPortraitPost, InstagramSquarePost, Linkback, Watermark,
+                          Paragraph, TwitterLargeCard, TwitterPost, Image)
+from nider.utils import create_test_image, get_random_texture
 
 
 class TestLinkback(unittest.TestCase):

@@ -1,8 +1,6 @@
 import unittest
 
-from nider.colors import monochrome_color
-from nider.colors import color_to_rgb
-from nider.colors import COLORS
+from nider.colors import monochrome_color, color_to_rgb, COLORS
 
 
 class TestMonochromeColor(unittest.TestCase):

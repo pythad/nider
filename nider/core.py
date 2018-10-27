@@ -1,11 +1,8 @@
 import textwrap
 
-from nider.utils import get_font
-
-from nider.mixins import MultilineTextMixin
-from nider.mixins import AlignMixin
-
 from nider.colors.utils import color_to_rgb
+from nider.mixins import AlignMixin, MultilineTextMixin
+from nider.utils import get_font
 
 
 class Font:
