@@ -3,11 +3,19 @@
 
 """The setup script."""
 
-import pip
 
-from pip.req import parse_requirements
+try:  # for pip >= 10
+    from pip._internal.req import parse_requirements
+except ImportError:  # for pip <= 9.0.3
+    from pip.req import parse_requirements
 
 from setuptools import setup, find_packages
+
+try:  # for pip >= 10
+    from pip._internal.download import PipSession
+except ImportError:  # for pip <= 9.0.3
+    from pip.download import PipSession
+
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
@@ -17,12 +25,12 @@ with open('HISTORY.rst') as history_file:
 
 parsed_requirements = parse_requirements(
     'requirements/prod.txt',
-    session=pip.download.PipSession()
+    session=PipSession()
 )
 
 parsed_test_requirements = parse_requirements(
     'requirements/test.txt',
-    session=pip.download.PipSession()
+    session=PipSession()
 )
 
 requirements = [str(ir.req) for ir in parsed_requirements]
