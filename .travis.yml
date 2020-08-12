@@ -10,7 +10,7 @@ deploy:
     tags: true
 before_install:
     - python --version
-    - pip install --upgrade pip
+    - python -m pip install --upgrade pip
     - pip --version
 install: pip install -U tox-travis
 language: python
