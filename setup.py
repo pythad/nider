@@ -12,7 +12,7 @@ except ImportError:  # for pip <= 9.0.3
 from setuptools import setup, find_packages
 
 try:  # for pip >= 10
-    from pip._internal.download import PipSession
+    from pip._internal.network.session import PipSession
 except ImportError:  # for pip <= 9.0.3
     from pip.download import PipSession
 
@@ -33,8 +33,8 @@ parsed_test_requirements = parse_requirements(
     session=PipSession()
 )
 
-requirements = [str(ir.req) for ir in parsed_requirements]
-test_requirements = [str(tr.req) for tr in parsed_test_requirements]
+requirements = [str(ir.requirement) for ir in parsed_requirements]
+test_requirements = [str(tr.requirement) for tr in parsed_test_requirements]
 
 setup(
     name='nider',
