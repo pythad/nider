@@ -19,4 +19,4 @@ python:
     - 3.8
     - 3.7
     - 3.6
-script: python setup.py test
+script: tox
