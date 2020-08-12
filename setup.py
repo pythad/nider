@@ -32,9 +32,12 @@ parsed_test_requirements = parse_requirements(
     'requirements/test.txt',
     session=PipSession()
 )
-
-requirements = [str(ir.requirement) for ir in parsed_requirements]
-test_requirements = [str(tr.requirement) for tr in parsed_test_requirements]
+try:
+    requirements = [str(ir.req) for ir in parsed_requirements]
+    test_requirements = [str(tr.req) for tr in parsed_test_requirements]
+except AttributeError:
+    requirements = [str(ir.requirement) for ir in parsed_requirements]
+    test_requirements = [str(tr.requirement) for tr in parsed_test_requirements]
 
 setup(
     name='nider',
