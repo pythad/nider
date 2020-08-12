@@ -8,10 +8,13 @@ deploy:
     python: 3.6
     repo: pythad/nider
     tags: true
+before_install:
+    - python --version
+    - pip install -U pip
 install: pip install -U tox-travis
 language: python
 python:
-- 3.6
-- 3.5
-- 3.4
+    - 3.6
+    - 3.5
+    - 3.4
 script: tox
