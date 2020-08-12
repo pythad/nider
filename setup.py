@@ -14,7 +14,7 @@ from setuptools import setup, find_packages
 try:  # for pip >= 10
     from pip._internal.network.session import PipSession
 except ImportError:  # for pip <= 9.0.3
-    from pip.download import PipSession
+    from pip._internal.download import PipSession
 
 
 with open('README.rst') as readme_file:
