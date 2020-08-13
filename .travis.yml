@@ -5,13 +5,18 @@ deploy:
   user: pythad
   distributions: sdist bdist_wheel
   on:
-    python: 3.6
+    python: 3.8
     repo: pythad/nider
     tags: true
+before_install:
+    - python --version
+    - python -m pip install --upgrade pip
+    - pip --version
+    - pip install -r requirements/dev.txt
 install: pip install -U tox-travis
 language: python
 python:
-- 3.6
-- 3.5
-- 3.4
+    - 3.8
+    - 3.7
+    - 3.6
 script: tox
