@@ -1,0 +1,13 @@
+pull_request_rules:
+  - name: automatic merge for PyUp pull requests
+    conditions:
+      - author=pyup-bot
+      - status-success=Travis CI - Pull Request
+    actions:
+      merge:
+        method: merge
+  - name: delete head branch after merge
+    conditions:
+      - merged
+    actions:
+      delete_head_branch: {}
