@@ -1,2 +1,2 @@
 colorthief==0.2.1
-Pillow==7.2.0
+Pillow==8.0.1
